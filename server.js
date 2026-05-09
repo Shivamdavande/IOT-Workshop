@@ -112,10 +112,15 @@ app.post('/api/save-data', (req, res) => {
 });
 
 app.get('/api/save-data', (req, res) => {
-  const { temp, humidity } = req.query;
+  let { temp, humidity, hum } = req.query;
+
+  // Support both 'humidity' and 'hum' parameters
+  if (humidity === undefined && hum !== undefined) {
+    humidity = hum;
+  }
 
   if (temp === undefined || humidity === undefined) {
-    return res.status(400).json({ error: 'Missing parameters' });
+    return res.status(400).json({ error: 'Missing parameters: temp and humidity (or hum)' });
   }
 
   db.run(
