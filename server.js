@@ -90,6 +90,47 @@ app.get('/api/sensor', (req, res) => {
   );
 });
 
+// API Alternative: /api/save-data (alias for /api/sensor)
+app.post('/api/save-data', (req, res) => {
+  const { temperature, humidity } = req.body;
+
+  if (temperature === undefined || humidity === undefined) {
+    return res.status(400).json({ error: 'Missing temperature or humidity' });
+  }
+
+  db.run(
+    'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)',
+    [temperature, humidity],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      res.json({ success: true, message: 'Data saved successfully' });
+    }
+  );
+});
+
+app.get('/api/save-data', (req, res) => {
+  const { temp, humidity } = req.query;
+
+  if (temp === undefined || humidity === undefined) {
+    return res.status(400).json({ error: 'Missing parameters' });
+  }
+
+  db.run(
+    'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)',
+    [parseFloat(temp), parseFloat(humidity)],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      res.json({ success: true, message: 'Data saved successfully' });
+    }
+  );
+});
+
 // API 2: Fetch text from lcd.txt
 app.get('/api/lcd-text', (req, res) => {
   const lcdFilePath = path.join(__dirname, 'lcd.txt');
