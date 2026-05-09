@@ -1,6 +1,5 @@
-node_modules/
-data.db
-lcd.txt
-.env
+node_modules
+server/database.sqlite
+server/lcd.txt
 .DS_Store
-*.log
+.env

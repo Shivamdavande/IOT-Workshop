@@ -1,230 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTec IoT - Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SISTec IoT 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-<body class="bg-gray-100">
-  <nav class="bg-blue-600 text-white p-4 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">SISTec IoT Application 2026</h1>
-      <div class="flex items-center gap-4">
-        <span id="username" class="font-semibold"></span>
-        <button
-          onclick="logout()"
-          class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-semibold transition"
-        >
-          Logout
-        </button>
-      </div>
-    </div>
-  </nav>
+<body class="p-4 md:p-8">
+    <div class="bg-animate"></div>
+    <div id="particles-js"></div>
 
-  <div class="container mx-auto p-6">
-    <!-- Section 1: Latest Readings -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-gray-600 text-sm font-semibold uppercase mb-4">Latest Temperature</h2>
-        <div class="flex items-end gap-2">
-          <p id="tempValue" class="text-5xl font-bold text-red-500">--</p>
-          <span class="text-2xl text-gray-600 mb-1">°C</span>
+    <!-- Navbar -->
+    <nav class="glass px-6 py-4 flex flex-wrap items-center justify-between gap-4 mb-8 sticky top-4 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-tr from-cyan-400 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-white leading-tight">SISTec Smart IoT Dashboard 2026</h1>
+                <p class="text-xs text-cyan-400 tracking-widest uppercase">Workshop Edition</p>
+            </div>
         </div>
-        <p id="tempTime" class="text-gray-500 text-sm mt-4">--:-- --</p>
-        <p id="tempDate" class="text-gray-500 text-sm">--</p>
-      </div>
-
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-gray-600 text-sm font-semibold uppercase mb-4">Latest Humidity</h2>
-        <div class="flex items-end gap-2">
-          <p id="humidValue" class="text-5xl font-bold text-blue-500">--</p>
-          <span class="text-2xl text-gray-600 mb-1">%</span>
+        
+        <div class="flex flex-wrap items-center gap-6">
+            <div class="hidden md:flex flex-col items-end">
+                <p id="liveTime" class="text-white font-mono text-lg font-bold">--:--:--</p>
+                <p id="liveDate" class="text-gray-400 text-xs">--/--/----</p>
+            </div>
+            <div class="flex items-center gap-3 border-l border-white/10 pl-6">
+                <div class="text-right">
+                    <p id="userName" class="text-sm font-semibold text-white">Guest User</p>
+                    <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 uppercase tracking-tighter">Logout</button>
+                </div>
+                <div class="w-10 h-10 bg-white/10 rounded-full border border-white/20 flex items-center justify-center overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar">
+                </div>
+            </div>
         </div>
-        <p id="humidTime" class="text-gray-500 text-sm mt-4">--:-- --</p>
-        <p id="humidDate" class="text-gray-500 text-sm">--</p>
-      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- SECTION 1: LIVE SENSOR OVERVIEW -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Temp Card -->
+            <div class="glass p-6 glass-card relative overflow-hidden" data-aos="fade-right">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-red-500/20 rounded-xl text-red-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase">Latest</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium">Temperature</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="tempVal" class="text-4xl font-bold text-white">0.0</span>
+                    <span class="text-xl text-red-400 mb-1">°C</span>
+                </div>
+                <div class="mt-4 h-12 w-full">
+                    <canvas id="miniChartTemp"></canvas>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-2">Update: <span id="tempTime">--:--</span></p>
+            </div>
+
+            <!-- Humidity Card -->
+            <div class="glass p-6 glass-card" data-aos="fade-right" data-aos-delay="100">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-blue-500/20 rounded-xl text-blue-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    </div>
+                    <div class="relative w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path class="text-white/10" stroke-dasharray="100, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="humidityProgress" class="text-blue-400" stroke-dasharray="0, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium">Humidity</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="humVal" class="text-4xl font-bold text-white">0</span>
+                    <span class="text-xl text-blue-400 mb-1">%</span>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-6">Stable Condition</p>
+            </div>
+
+            <!-- Soil Card -->
+            <div class="glass p-6 glass-card" data-aos="fade-right" data-aos-delay="200">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-green-500/20 rounded-xl text-green-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium">Soil Moisture</h3>
+                <div class="flex items-end gap-2 mt-2">
+                    <span id="soilVal" class="text-4xl font-bold text-white">0</span>
+                    <span class="text-xl text-green-400 mb-1">%</span>
+                </div>
+                <div class="mt-4 w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                    <div id="soilProgress" class="bg-green-500 h-full transition-all duration-1000" style="width: 0%"></div>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-2">Water Level: <span id="soilStatus">Dry</span></p>
+            </div>
+
+            <!-- IR Card -->
+            <div class="glass p-6 glass-card overflow-hidden" data-aos="fade-right" data-aos-delay="300">
+                <div class="flex justify-between items-start mb-4">
+                    <div id="irIcon" class="p-3 bg-gray-500/20 rounded-xl text-gray-400 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <div class="radar-container relative w-10 h-10">
+                        <div class="absolute inset-0 bg-cyan-400/20 rounded-full animate-ping"></div>
+                        <div class="absolute inset-2 bg-cyan-400/40 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium">Object Detection</h3>
+                <div class="mt-2">
+                    <span id="irVal" class="text-xl font-bold text-gray-400 uppercase tracking-widest">Scanning...</span>
+                </div>
+                <div id="irGlow" class="h-1 w-full bg-gray-500 mt-4 rounded-full shadow-[0_0_15px_rgba(156,163,175,0.5)] transition-all"></div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- SECTION 2: LIVE CHARTS -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="glass p-6" data-aos="fade-up">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <span class="w-2 h-6 bg-cyan-400 rounded-full"></span>
+                            Sensor Analytics (Realtime)
+                        </h2>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] text-gray-400">LIVE POLLING: 5s</span>
+                        </div>
+                    </div>
+                    <div class="h-[400px]">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: DATA TABLE -->
+                <div class="glass p-6" data-aos="fade-up">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <h2 class="text-xl font-bold">Historical Records</h2>
+                        <div class="relative w-full md:w-64">
+                            <input type="text" id="tableSearch" placeholder="Search data..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table id="sensorTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Temp</th>
+                                    <th>Humidity</th>
+                                    <th>Soil</th>
+                                    <th>IR</th>
+                                    <th>Time</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Data rows injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center text-sm text-gray-400">
+                        <p>Showing latest <span id="rowCount">0</span> records</p>
+                        <div class="flex gap-2">
+                            <button class="px-4 py-2 bg-white/5 rounded-lg hover:bg-white/10 transition">Prev</button>
+                            <button class="px-4 py-2 bg-white/5 rounded-lg hover:bg-white/10 transition">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <!-- SECTION 3: LCD CONTROL -->
+                <div class="glass p-6" data-aos="fade-left">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="w-2 h-6 bg-purple-600 rounded-full"></span>
+                        LCD Message Control
+                    </h2>
+                    <div class="bg-black/40 border border-white/10 rounded-xl p-4 mb-4 font-mono text-cyan-400 text-lg flex items-center justify-center min-h-[80px] shadow-inner">
+                        <span id="lcdPreview">SISTec 2026</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-500 uppercase block mb-1">New Message (Max 16 chars)</label>
+                            <input type="text" id="lcdInput" maxlength="16" placeholder="Type here..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-400 text-white">
+                        </div>
+                        <button onclick="updateLCD()" class="btn-cyber w-full py-3 rounded-xl" style="background: linear-gradient(45deg, #7000ff, #ff00f2)">
+                            Update Display
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: SYSTEM STATUS -->
+                <div class="glass p-6" data-aos="fade-left" data-aos-delay="100">
+                    <h2 class="text-xl font-bold mb-6">System Status</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="pulse-green"></div>
+                                <span class="text-sm">WiFi Connection</span>
+                            </div>
+                            <span class="text-xs text-green-400 font-bold uppercase">Online</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="pulse-green" id="apiStatusPulse"></div>
+                                <span class="text-sm">Main API Server</span>
+                            </div>
+                            <span id="apiStatusText" class="text-xs text-green-400 font-bold uppercase">Online</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="pulse-green"></div>
+                                <span class="text-sm">Database (SQLite)</span>
+                            </div>
+                            <span class="text-xs text-green-400 font-bold uppercase">Active</span>
+                        </div>
+                        <div class="mt-6 pt-6 border-t border-white/10 text-center">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-widest">Last Hardware Sync</p>
+                            <p id="lastSync" class="text-sm font-mono text-cyan-400 mt-1">--:--:--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Toast -->
+    <div id="toast" class="fixed bottom-10 right-10 glass px-6 py-4 rounded-xl border-l-4 border-green-500 transform translate-y-20 opacity-0 transition-all duration-500 flex items-center gap-3 z-[100]">
+        <div class="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center text-green-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <div>
+            <p class="text-white font-bold text-sm">Action Success</p>
+            <p id="toastMsg" class="text-gray-400 text-xs">Message updated successfully</p>
+        </div>
     </div>
 
-    <!-- Section 2: LCD Text Input -->
-    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-      <h2 class="text-lg font-bold text-gray-800 mb-4">Send Text to LCD (Max 16 Characters)</h2>
-      <div class="flex gap-2">
-        <input
-          type="text"
-          id="lcdText"
-          maxlength="16"
-          class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter text..."
-        />
-        <button
-          onclick="sendLcdText()"
-          class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition"
-        >
-          Submit
-        </button>
-      </div>
-      <p id="lcdMessage" class="mt-2 text-sm hidden"></p>
-    </div>
-
-    <!-- Section 3: Historical Data Table -->
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-lg font-bold text-gray-800 mb-4">Sensor Data Records</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="bg-blue-600 text-white">
-              <th class="border border-gray-300 px-4 py-2 text-left">#</th>
-              <th class="border border-gray-300 px-4 py-2 text-left">Temperature</th>
-              <th class="border border-gray-300 px-4 py-2 text-left">Humidity</th>
-              <th class="border border-gray-300 px-4 py-2 text-left">Time</th>
-              <th class="border border-gray-300 px-4 py-2 text-left">Date</th>
-              <th class="border border-gray-300 px-4 py-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody id="dataTable">
-            <tr>
-              <td colspan="6" class="text-center py-4 text-gray-500">Loading...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Check authentication
-    window.addEventListener('load', () => {
-      const user = localStorage.getItem('user');
-      if (!user) {
-        window.location.href = 'index.html';
-        return;
-      }
-
-      const userData = JSON.parse(user);
-      document.getElementById('username').textContent = userData.name;
-
-      loadLatestSensorData();
-      loadAllSensorData();
-
-      // Refresh data every 5 seconds
-      setInterval(loadLatestSensorData, 5000);
-      setInterval(loadAllSensorData, 5000);
-    });
-
-    function logout() {
-      localStorage.removeItem('user');
-      window.location.href = 'index.html';
-    }
-
-    async function loadLatestSensorData() {
-      try {
-        const response = await fetch('/api/sensor-latest');
-        const data = await response.json();
-
-        document.getElementById('tempValue').textContent = data.temperature || '--';
-        document.getElementById('humidValue').textContent = data.humidity || '--';
-        document.getElementById('tempTime').textContent = data.time || '--';
-        document.getElementById('tempDate').textContent = data.date || '--';
-        document.getElementById('humidTime').textContent = data.time || '--';
-        document.getElementById('humidDate').textContent = data.date || '--';
-      } catch (error) {
-        console.error('Error loading latest data:', error);
-      }
-    }
-
-    async function loadAllSensorData() {
-      try {
-        const response = await fetch('/api/sensor-data');
-        const data = await response.json();
-
-        const tableBody = document.getElementById('dataTable');
-        tableBody.innerHTML = '';
-
-        if (data.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500">No data available</td></tr>';
-          return;
-        }
-
-        data.forEach((row, index) => {
-          const tr = document.createElement('tr');
-          tr.className = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
-          tr.innerHTML = `
-            <td class="border border-gray-300 px-4 py-2">${index + 1}</td>
-            <td class="border border-gray-300 px-4 py-2">${row.temperature}°C</td>
-            <td class="border border-gray-300 px-4 py-2">${row.humidity}%</td>
-            <td class="border border-gray-300 px-4 py-2">${row.time}</td>
-            <td class="border border-gray-300 px-4 py-2">${row.date}</td>
-            <td class="border border-gray-300 px-4 py-2 text-center">
-              <button
-                onclick="deleteRecord(${row.id})"
-                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition"
-              >
-                Delete
-              </button>
-            </td>
-          `;
-          tableBody.appendChild(tr);
-        });
-      } catch (error) {
-        console.error('Error loading sensor data:', error);
-      }
-    }
-
-    async function sendLcdText() {
-      const text = document.getElementById('lcdText').value;
-      const messageDiv = document.getElementById('lcdMessage');
-
-      if (!text.trim()) {
-        messageDiv.textContent = 'Please enter text';
-        messageDiv.className = 'mt-2 text-sm bg-yellow-100 text-yellow-700 p-2 rounded';
-        messageDiv.classList.remove('hidden');
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/lcd-text', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          messageDiv.textContent = 'Text sent to LCD successfully!';
-          messageDiv.className = 'mt-2 text-sm bg-green-100 text-green-700 p-2 rounded';
-          document.getElementById('lcdText').value = '';
-        } else {
-          messageDiv.textContent = data.error || 'Failed to send text';
-          messageDiv.className = 'mt-2 text-sm bg-red-100 text-red-700 p-2 rounded';
-        }
-      } catch (error) {
-        messageDiv.textContent = 'Error: ' + error.message;
-        messageDiv.className = 'mt-2 text-sm bg-red-100 text-red-700 p-2 rounded';
-      }
-
-      messageDiv.classList.remove('hidden');
-      setTimeout(() => messageDiv.classList.add('hidden'), 3000);
-    }
-
-    async function deleteRecord(id) {
-      if (!confirm('Delete this record?')) return;
-
-      try {
-        const response = await fetch(`/api/sensor/${id}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          loadAllSensorData();
-        } else {
-          alert('Failed to delete record');
-        }
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-    }
-  </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        AOS.init();
+        particlesJS.load('particles-js', 'https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js@master/demo/particles.json');
+    </script>
 </body>
 </html>
